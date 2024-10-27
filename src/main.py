@@ -32,16 +32,17 @@ wiki_titles = [
 ]
 # Download and load data
 city_docs = {}
-is_files_exist = False
-files = os.path.abspath("./files")
-doc_paths = [os.path.join(files,file) for file in os.listdir(files)]
-if len(doc_paths):
-    is_files_exist = True
-    
+is_files_exist = os.path.exists("./files")
+
+if not is_files_exist:
+   os.mkdir("./files")
+data_folder_path = os.path.abspath("./files")
+doc_paths = [os.path.join(data_folder_path,file) for file in os.listdir(data_folder_path)]
+
 # Check does files are already downloaded
 if not is_files_exist or len(wiki_titles) != len(doc_paths):
    for title in wiki_titles:
-       doc_path = download_data(title)
+       doc_path = download_data(title, data_folder_path)
        city_docs[title] = load_data(doc_path, title)
 else:
     for doc_path,title in zip(doc_paths,wiki_titles):
